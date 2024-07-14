@@ -18,6 +18,14 @@ initlock(struct spinlock *lk, char *name)
 
 // Acquire the lock.
 // Loops (spins) until the lock is acquired.
+/*
+
+This function does the following:
+1. Disable interrupts.
+2. intena = false.
+3. noff   = 1; //previosly it was 0 and got incremented to 1. This noff increments only when the locks are held
+
+*/
 void
 acquire(struct spinlock *lk)
 {

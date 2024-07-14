@@ -13,7 +13,7 @@ sub entry {
     print " li a7, SYS_${name}\n";
     print " ecall\n";
     print " ret\n";
-}
+}   
 	
 entry("fork");
 entry("exit");

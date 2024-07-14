@@ -447,7 +447,7 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   
-  c->proc = 0;
+  c->proc = 0;                            // setting the cpu->proc to NULL
   for(;;){
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
@@ -459,12 +459,12 @@ scheduler(void)
         // to release its lock and then reacquire it
         // before jumping back to us.
         p->state = RUNNING;
-        c->proc = p;
+        c->proc = p;                      // cpu_struct->proc points towards the running proc_struct
         swtch(&c->context, &p->context);
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
-        c->proc = 0;
+        c->proc = 0;                      // setting the cpu->proc to NULL      
       }
       release(&p->lock);
     }
@@ -484,6 +484,7 @@ sched(void)
   int intena;
   struct proc *p = myproc();
 
+  // checks to be done till ln.495
   if(!holding(&p->lock))
     panic("sched p->lock");
   if(mycpu()->noff != 1)
@@ -493,12 +494,13 @@ sched(void)
   if(intr_get())
     panic("sched interruptible");
 
-  intena = mycpu()->intena;
+  intena = mycpu()->intena;                   // save intena
   swtch(&p->context, &mycpu()->context);
-  mycpu()->intena = intena;
+  mycpu()->intena = intena;                   // restore intena
 }
 
 // Give up the CPU for one scheduling round.
+// called from usertrap() & kerneltrap()
 void
 yield(void)
 {
@@ -530,7 +532,7 @@ forkret(void)
   usertrapret();
 }
 
-// Atomically release lock and sleep on chan.
+// Atomically release lock and sleep on chan -> This means when the process goes into sleeping state the lock will be released. 
 // Reacquires lock when awakened.
 void
 sleep(void *chan, struct spinlock *lk)
