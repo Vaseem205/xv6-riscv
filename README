@@ -2,12 +2,6 @@ xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
 
-CHANGES(in Entry.S):
-1. Sets up the stack.
-2. Sets up UART Communication.
-3. Flush out all the active cores on to the terminal.
-4. Jump to kernel logic (start.c)
-
 ACKNOWLEDGMENTS
 
 xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
